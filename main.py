@@ -2,7 +2,9 @@ import os
 import pandas as pd
 import re
 
+
 # navigate to buildings folder
+
 os.chdir("../Buildings")
 cwd = os.path.abspath(os.curdir)
 dir_content = os.listdir()
@@ -12,6 +14,9 @@ building_folders = []
 for item in dir_content:
     if os.path.isdir(os.path.join(cwd, item)):
         building_folders.append(item)
+
+#open("schedules_summary_windows.txt","w").close()
+open("schedules_summary.txt","w").close()
 
 for building in building_folders:
     path = os.path.join(cwd, building)
@@ -23,5 +28,6 @@ for building in building_folders:
     # copy contents of files to a pandas dataframe
     for schedule in schedules:
         df = pd.read_excel(f'{path}\{schedule}', sheet_name="door_schedules")
-        print(df)
+        with open("schedules_summary.txt", "a") as summary_file:
+            summary_file.write(f"{schedule.strip('Schedules')} \n{df} \n\n")
         
