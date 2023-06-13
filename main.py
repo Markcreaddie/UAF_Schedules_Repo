@@ -27,7 +27,9 @@ for building in building_folders:
             schedules.append(file)
     # copy contents of files to a pandas dataframe
     for schedule in schedules:
-        df = pd.read_excel(f'{path}\{schedule}', sheet_name="door_schedules")
+        df = pd.read_excel(f'{path}\{schedule}', sheet_name="door_schedules").fillna(0)
+        grouped_df= df.groupby("Door No.").sum()
+        int_values_df= grouped_df.astype({"Drawings Quantity":int,"BoQ Quantity":int})
         with open("schedules_summary.txt", "a") as summary_file:
-            summary_file.write(f"{schedule.strip('Schedules')} \n{df} \n\n")
-        
+            summary_file.write(f"{schedule.strip('Schedules')} \n{int_values_df} \n\n")
+
